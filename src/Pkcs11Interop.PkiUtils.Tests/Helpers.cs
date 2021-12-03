@@ -76,7 +76,7 @@ namespace Net.Pkcs11Interop.PkiUtils.Tests
             publicKeyAttributes.Add(new ObjectAttribute(CKA.CKA_VERIFY, true));
             publicKeyAttributes.Add(new ObjectAttribute(CKA.CKA_VERIFY_RECOVER, true));
             publicKeyAttributes.Add(new ObjectAttribute(CKA.CKA_WRAP, true));
-            publicKeyAttributes.Add(new ObjectAttribute(CKA.CKA_MODULUS_BITS, 1024));
+            publicKeyAttributes.Add(new ObjectAttribute(CKA.CKA_MODULUS_BITS, 2048));
             publicKeyAttributes.Add(new ObjectAttribute(CKA.CKA_PUBLIC_EXPONENT, new byte[] { 0x01, 0x00, 0x01 }));
 
             // Prepare attribute template of new private key

@@ -25,17 +25,17 @@ namespace Net.Pkcs11Interop.PkiUtils.Tests
         /// <summary>
         /// The PKCS#11 unmanaged library path
         /// </summary>
-        public static string Pkcs11LibraryPath = @"siecap11.dll";
+        public static string Pkcs11LibraryPath = @"asepkcs.dll";
 
         /// <summary>
         /// Serial number of the token (smartcard) that should be used in these tests. May be null if TokenLabel is specified.
         /// </summary>
-        public static string TokenSerial = null;
+        public static string TokenSerial = "8328050401991676";
 
         /// <summary>
         /// Label of the token (smartcard) that should be used in these tests. May be null if TokenSerial is specified.
         /// </summary>
-        public static string TokenLabel = @"Pkcs11Interop";
+        public static string TokenLabel = null;
 
         /// <summary>
         /// The normal user pin.

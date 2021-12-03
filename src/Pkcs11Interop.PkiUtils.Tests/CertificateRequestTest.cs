@@ -14,6 +14,8 @@
  */
 
 using System;
+using System.IO;
+using System.Text;
 using Net.Pkcs11Interop.Common;
 using Net.Pkcs11Interop.HighLevelAPI;
 using NUnit.Framework;
@@ -30,7 +32,7 @@ namespace Net.Pkcs11Interop.PkiUtils.Tests
         /// PKCS#10 certificate request generation test
         /// </summary>
         [Test()]
-        public void GeneratePkcs10Test()
+        public static void GeneratePkcs10Test()
         {
             using (Pkcs11 pkcs11 = new Pkcs11(Settings.Pkcs11LibraryPath, false))
             {
@@ -54,17 +56,42 @@ namespace Net.Pkcs11Interop.PkiUtils.Tests
                     Helpers.GenerateKeyPair(session, ckaLabel, ckaId, out publicKeyHandle, out privateKeyHandle);
 
                     // Generate certificate request in PKCS#10 format
-                    string subjectDistinguishedName = @"C=SK, O=Pkcs11Interop.PkiUtils.Tests, CN=John Doe";
+                    string subjectDistinguishedName = @"OU=IT,O=Cong Ty Co Phan Chu Ky So Vi Na,L=Ho Chi Minh,CN=smartsign.com.vn,C=VN";
                     byte[] pkcs10 = CertificateRequest.GeneratePkcs10(session, publicKeyHandle, privateKeyHandle, subjectDistinguishedName, HashAlgorithm.SHA256);
 
                     // Do something interesting with certificate request
+                    // write csr to file
+                    ByteArrayToFile("smartcard.csr", pkcs10);
 
+                    StringBuilder builder = new StringBuilder();
+                    builder.AppendLine("-----BEGIN NEW CERTIFICATE REQUEST-----");
+                    builder.AppendLine(Convert.ToBase64String(pkcs10, Base64FormattingOptions.InsertLineBreaks));
+                    builder.AppendLine("-----END NEW CERTIFICATE REQUEST-----");
+                    Console.WriteLine(builder.ToString());
+                    File.WriteAllText("smartcard.pem", builder.ToString());
                     // Destroy keys
                     session.DestroyObject(privateKeyHandle);
                     session.DestroyObject(publicKeyHandle);
 
                     session.Logout();
                 }
+            }
+        }
+
+        public static bool ByteArrayToFile(string fileName, byte[] byteArray)
+        {
+            try
+            {
+                using (var fs = new FileStream(fileName, FileMode.Create, FileAccess.Write))
+                {
+                    fs.Write(byteArray, 0, byteArray.Length);
+                    return true;
+                }
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine("Exception caught in process: {0}", ex);
+                return false;
             }
         }
     }
